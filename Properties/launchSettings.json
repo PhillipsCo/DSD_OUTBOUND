@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ftpTesting": {
+      "commandName": "Project",
+      "commandLineArgs": "DEMO"
+    }
+  }
+}
