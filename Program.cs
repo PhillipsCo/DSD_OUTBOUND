@@ -42,7 +42,7 @@ string content = "<p>";
 string status = "OK";
 Log.Logger = new LoggerConfiguration()
        .WriteTo.Console()
-       .WriteTo.File($"C:\\CIS\\logs\\Inbound {args[0]} log-.txt", rollingInterval: RollingInterval.Day)
+       .WriteTo.File($"C:\\CIS\\logs\\OutBound {args[0]} log-.txt", rollingInterval: RollingInterval.Day)
        .CreateLogger();
 
 try
