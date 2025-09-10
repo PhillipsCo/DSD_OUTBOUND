@@ -135,23 +135,34 @@ using (SqlConnection conn = new SqlConnection(custBuilder.ConnectionString))
     conn.Open();
     Log.Information($"Conected to: {conn.Database} getting API List");
     SqlCommand APIListcommand = new SqlCommand(SQL, conn);
-    using (SqlDataReader rdr = APIListcommand.ExecuteReader())
-
+    using (SqlConnection conndel = new SqlConnection(custBuilder.ConnectionString))
     {
-        while (rdr.Read())
-        {
-            TableApiName x = new TableApiName();
-            x.tableName = rdr["TABLE_NAME"].ToString();
-            x.APIname = rdr["API_NAME"].ToString();
-            x.filter = rdr["FILTER"].ToString();
-            x.batchSize = (int) rdr["BATCHSIZE"];
+        conndel.Open();
+        using (SqlDataReader rdr = APIListcommand.ExecuteReader())
 
-            tableApiNames.Add(x);
+        {
+            while (rdr.Read())
+            {
+                TableApiName x = new TableApiName();
+                x.tableName = rdr["TABLE_NAME"].ToString();
+                x.APIname = rdr["API_NAME"].ToString();
+                x.filter = rdr["FILTER"].ToString();
+                x.batchSize = (int)rdr["BATCHSIZE"];
+
+                tableApiNames.Add(x);
+                //Truncate all HFS Tables
+                SqlCommand commanddel = new SqlCommand("TRUNCATE TABLE " + x.tableName, conndel);
+                commanddel.ExecuteNonQuery();
+            }
+            rdr.Close();
+
         }
-        rdr.Close();
+        conn.Close();
+        conndel.Close();
+
 
     }
-    conn.Close();
+    
 }
 
 //sendEmail(accessInfo.email_tenantId, accessInfo.email_clientId, accessInfo.email_secret, accessInfo.email_sender, accessInfo.email_recipient, subject, content);
@@ -379,8 +390,8 @@ async Task<string> CallApiAsync(string Url, string AccessToken, string APIName,s
 
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
-
-                var response = await client.GetAsync(url);
+             
+            var response = await client.GetAsync(url);
                 var json = await response.Content.ReadAsStringAsync();
 
                 var jObject = JObject.Parse(json);
