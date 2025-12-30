@@ -2,7 +2,7 @@
   "profiles": {
     "ftpTesting": {
       "commandName": "Project",
-      "commandLineArgs": "DEMO"
+      "commandLineArgs": "KLO ALL N"
     }
   }
 }

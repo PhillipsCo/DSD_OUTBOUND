@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BCoutbound
+namespace DSD_Outbound.Models
 {
-    internal class TableApiName
+    public class TableApiName
     {
         public string? tableName { get; set; }
         public string? APIname { get; set; }
